@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>របាយការណ៍លទ្ធផលសិក្សា - អនុវិទ្យាល័យរកាកណ្តាល</title>
+    <title>របាយការណ៍លទ្ធផលសិក្សា - អនុវិទ្យាល័យរកាកណ្តាល (GEIP)</title>
     
     <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -33,11 +33,28 @@
         ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #64748b; }
         
+        /* Ensure charts scale perfectly inside their containers */
+        .chart-container {
+            position: relative;
+            height: 40vh; /* Default responsive height */
+            min-height: 250px;
+            width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px; /* Fixed height for larger screens */
+            }
+        }
+        
         /* Print layout adjustments */
         @media print {
             .no-print { display: none !important; }
             body { background-color: white; }
             .shadow-sm, .shadow-md { box-shadow: none !important; border: 1px solid #e2e8f0; }
+            .chart-container { height: 300px !important; }
+            canvas { max-width: 100% !important; page-break-inside: avoid; }
+            section { page-break-inside: avoid; margin-bottom: 20px; }
         }
     </style>
 </head>
@@ -46,15 +63,16 @@
     <!-- Header -->
     <header class="bg-blue-900 text-white shadow-md sticky top-0 z-50 no-print">
         <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
-            <div class="text-center md:text-left flex items-center gap-4">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Seal_of_the_Ministry_of_Education%2C_Youth_and_Sport_of_Cambodia.svg/1200px-Seal_of_the_Ministry_of_Education%2C_Youth_and_Sport_of_Cambodia.svg.png" alt="MoEYS Logo" class="w-12 h-12 object-contain hidden sm:block bg-white p-1 rounded-full">
-                <div>
-                    <h3 class="text-xs md:text-sm font-semibold text-blue-200 uppercase tracking-wider">ក្រសួងអប់រំ យុវជន និងកីឡា (GEIP)</h3>
+            <div class="flex items-center gap-4">
+                <!-- MoEYS Logo -->
+                <img src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Emblem_of_the_Ministry_of_Education%2C_Youth_and_Sport_%28Cambodia%29.svg" alt="MoEYS Logo" class="w-14 h-14 md:w-16 md:h-16 object-contain bg-white rounded-full p-1 shadow-sm">
+                <div class="text-left">
+                    <h3 class="text-xs md:text-sm font-semibold text-blue-200 uppercase tracking-wider">ក្រសួងអប់រំ យុវជន និងកីឡា (គម្រោង GEIP)</h3>
                     <h1 class="text-lg md:text-2xl font-bold font-moul mb-1">អនុវិទ្យាល័យរកាកណ្តាល</h1>
                 </div>
             </div>
-            <div>
-                <button id="downloadPdfBtn" class="bg-blue-600 border border-blue-400 text-white px-4 py-2 rounded shadow hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400 flex items-center gap-2 text-sm font-bold transition-colors">
+            <div class="w-full md:w-auto flex justify-center md:justify-end">
+                <button id="downloadPdfBtn" class="w-full md:w-auto bg-blue-600 border border-blue-400 text-white px-4 py-2 rounded shadow hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400 flex items-center justify-center gap-2 text-sm font-bold transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                     ទាញយកជា PDF
                 </button>
@@ -68,54 +86,52 @@
         <section class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 border-t-4 border-blue-800">
             <h2 class="text-xl font-bold mb-4 font-moul text-blue-900 border-b-2 border-blue-100 pb-2 flex items-center gap-2">
                 <svg class="w-6 h-6 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-                ព័ត៌មានសាលារៀន និងគណៈគ្រប់គ្រង
+                ព័ត៌មានសាលារៀន និងគណៈគ្រប់គ្រង (២០២៥-២០២៦)
             </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-sm">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-sm">
                 <div><span class="font-bold text-gray-500 block mb-1">ឈ្មោះសាលា:</span> <span class="text-gray-900 font-bold text-base">អនុវិទ្យាល័យរកាកណ្តាល</span></div>
                 <div><span class="font-bold text-gray-500 block mb-1">ទីតាំង:</span> <span class="text-gray-800">ភូមិ១ រកាកណ្តាល ក្រុងក្រចេះ</span></div>
                 <div><span class="font-bold text-gray-500 block mb-1">ឆ្នាំសិក្សា:</span> <span class="text-blue-700 font-bold bg-blue-50 px-2 py-1 rounded border border-blue-100">២០២៥-២០២៦</span></div>
                 <div><span class="font-bold text-gray-500 block mb-1">នាយកសាលា:</span> <span class="text-gray-800">លោក សេង សុខហេង (011 733 342)</span></div>
+                <div><span class="font-bold text-gray-500 block mb-1">គ្រូបង្គោល ICT:</span> <span class="text-gray-800">អ្នកស្រី ពុទ្ធ ពិសី (090 235 245)</span></div>
+                <div><span class="font-bold text-gray-500 block mb-1">កម្រិត:</span> <span class="text-gray-800">អនុវិទ្យាល័យ (ទី៧-៩)</span></div>
             </div>
         </section>
 
         <!-- ២. សូចនាករសំខាន់ៗ (Overview KPIs) -->
         <section>
             <h2 class="text-xl font-bold mb-6 font-moul text-blue-900 border-b-2 border-blue-200 pb-2">ទិដ្ឋភាពទូទៅនៃសិស្ស និងសុខភាព</h2>
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-                <!-- KPI 1 -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 relative border-b-4 border-blue-500 hover:shadow-md transition">
-                    <h3 class="text-xs font-bold text-gray-500 mb-1 uppercase">សិស្សចុះឈ្មោះសរុប</h3>
+                    <h3 class="text-xs font-bold text-gray-500 mb-1 uppercase">សិស្សចុះឈ្មោះសរុប (៧-៩)</h3>
                     <p class="text-3xl font-bold text-gray-900 mb-1">២៦១ <span class="text-sm font-normal text-gray-500">នាក់</span></p>
                     <p class="text-xs text-blue-600 font-semibold bg-blue-50 inline-block px-2 py-1 rounded">ស្រី ១៤០ (៥៣.៦%)</p>
                 </div>
-                <!-- KPI 2 -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 relative border-b-4 border-rose-500 hover:shadow-md transition">
                     <h3 class="text-xs font-bold text-gray-500 mb-1 uppercase">បញ្ហាអាហារូបត្ថម្ភ</h3>
                     <p class="text-3xl font-bold text-gray-900 mb-1">២៧ <span class="text-sm font-normal text-gray-500">នាក់</span></p>
                     <p class="text-xs text-rose-600 font-semibold bg-rose-50 inline-block px-2 py-1 rounded">ស្រី ១៥ | ប្រុស ១២</p>
                 </div>
-                <!-- KPI 3 -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 relative border-b-4 border-purple-500 hover:shadow-md transition">
                     <h3 class="text-xs font-bold text-gray-500 mb-1 uppercase">បេក្ខជន PISA (១៦ឆ្នាំ)</h3>
                     <p class="text-3xl font-bold text-gray-900 mb-1">៤ <span class="text-sm font-normal text-gray-500">នាក់</span></p>
                     <p class="text-xs text-purple-600 font-semibold bg-purple-50 inline-block px-2 py-1 rounded">ស្រី ១ | ប្រុស ៣</p>
                 </div>
-                <!-- KPI 4 -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 relative border-b-4 border-emerald-500 hover:shadow-md transition">
-                    <h3 class="text-xs font-bold text-gray-500 mb-1 uppercase">សិស្សមានពិការភាព</h3>
+                    <h3 class="text-xs font-bold text-gray-500 mb-1 uppercase">សិស្សមានពិការភាព (PBC3)</h3>
                     <p class="text-3xl font-bold text-gray-900 mb-1">០ <span class="text-sm font-normal text-gray-500">នាក់</span></p>
-                    <p class="text-xs text-emerald-600 font-semibold bg-emerald-50 inline-block px-2 py-1 rounded">ការអប់រំបរិយាបន្ន (PBC3)</p>
+                    <p class="text-xs text-emerald-600 font-semibold bg-emerald-50 inline-block px-2 py-1 rounded">ការអប់រំបរិយាបន្ន</p>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 lg:col-span-2">
-                     <h3 class="text-base font-bold text-blue-900 mb-4 font-moul">ចំនួនសិស្ស និងបុគ្គលិកសរុប</h3>
-                     <div class="relative h-64 w-full"><canvas id="enrollmentChart"></canvas></div>
+                     <h3 class="text-base font-bold text-blue-900 mb-4 font-moul">ចំនួនសិស្សតាមកម្រិតថ្នាក់</h3>
+                     <div class="chart-container"><canvas id="enrollmentByGradeChart"></canvas></div>
                 </div>
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
                      <h3 class="text-base font-bold text-blue-900 mb-4 font-moul">បញ្ហាអាហារូបត្ថម្ភ (តាមភេទ)</h3>
-                     <div class="relative h-64 w-full flex justify-center"><canvas id="healthChart"></canvas></div>
+                     <div class="chart-container flex justify-center"><canvas id="healthChart"></canvas></div>
                 </div>
             </div>
         </section>
@@ -123,25 +139,37 @@
         <!-- ៣. គ្រូ និងបុគ្គលិកអប់រំ -->
         <section>
             <h2 class="text-xl font-bold mb-6 font-moul text-blue-900 border-b-2 border-blue-200 pb-2">ស្ថានភាពគ្រូ និងបុគ្គលិកអប់រំ</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-                <!-- Staff KPIs -->
-                <div class="bg-orange-50 border border-orange-200 rounded-xl p-5 text-center">
-                    <p class="text-sm text-orange-800 font-bold mb-1">បុគ្គលិកអប់រំសរុប</p>
-                    <p class="text-3xl font-black text-orange-600">២២</p>
-                    <p class="text-xs text-orange-700 mt-1">ស្រី ១៩ (៨៦.៤%)</p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 relative border-l-4 border-orange-500">
+                    <h3 class="text-sm font-bold text-gray-500 mb-2">បុគ្គលិកអប់រំសរុប</h3>
+                    <p class="text-4xl font-bold text-gray-900 mb-1">២២</p>
+                    <p class="text-sm text-gray-500">ស្រី ១៩ (៨៦.៤%)</p>
                 </div>
-                <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-5 text-center">
-                    <p class="text-sm text-indigo-800 font-bold mb-1">បុគ្គលិកបង្រៀន (គ្រូ)</p>
-                    <p class="text-3xl font-black text-indigo-600">១៦</p>
-                    <p class="text-xs text-indigo-700 mt-1">ស្រី ១៤ (៨៧.៥%)</p>
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 relative border-l-4 border-indigo-500">
+                    <h3 class="text-sm font-bold text-gray-500 mb-2">បុគ្គលិកបង្រៀន</h3>
+                    <p class="text-4xl font-bold text-gray-900 mb-1">១៦</p>
+                    <p class="text-sm text-gray-500">ស្រី ១៤ (៨៧.៥%)</p>
                 </div>
-                <div class="bg-gray-50 border border-gray-200 rounded-xl p-5 text-center">
-                    <p class="text-sm text-gray-800 font-bold mb-1">បុគ្គលិកមិនបង្រៀន</p>
-                    <p class="text-3xl font-black text-gray-600">៦</p>
-                    <p class="text-xs text-gray-700 mt-1">ស្រី ៥ (៨៣.៣%)</p>
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 relative border-l-4 border-gray-500">
+                    <h3 class="text-sm font-bold text-gray-500 mb-2">បុគ្គលិកមិនបង្រៀន</h3>
+                    <p class="text-4xl font-bold text-gray-900 mb-1">៦</p>
+                    <p class="text-sm text-gray-500">ស្រី ៥ (៨៣.៣%)</p>
                 </div>
-                <div class="bg-white border border-gray-200 rounded-xl p-5 flex flex-col justify-center">
-                    <div class="relative h-24 w-full"><canvas id="staffPieChart"></canvas></div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                     <h3 class="text-lg font-bold text-blue-900 mb-4 font-moul">សរុប និងស្រី (បុគ្គលិក)</h3>
+                     <div class="chart-container"><canvas id="staffChart"></canvas></div>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex flex-col justify-between">
+                     <div>
+                         <h3 class="text-lg font-bold text-blue-900 mb-4 font-moul">សមាមាត្រយេនឌ័រ គ្រូ និងសិស្ស</h3>
+                     </div>
+                     <div class="space-y-6 flex-grow flex flex-col justify-center">
+                         <div class="relative h-24 w-full"><canvas id="teacherGenderChart"></canvas></div>
+                         <div class="relative h-24 w-full"><canvas id="studentGenderChart"></canvas></div>
+                     </div>
                 </div>
             </div>
         </section>
@@ -150,81 +178,116 @@
         <section>
             <h2 class="text-xl font-bold mb-6 font-moul text-blue-900 border-b-2 border-blue-200 pb-2">លទ្ធផលតេស្តស្តង់ដា ថ្នាក់ទី៩ (ឯកសារ ៣.១.៤)</h2>
             
+            <!-- EdTech Chart -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8 border-l-4 border-purple-500">
+                <div class="flex items-center gap-2 mb-2">
+                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    <h3 class="text-lg font-bold text-gray-800 font-moul">លទ្ធផលតេស្តស្តង់ដាតាមប្រព័ន្ធអនឡាញ (MoEYS EdTech)</h3>
+                </div>
+                <p class="text-sm text-gray-500 mb-4">ទិន្នន័យខេត្តក្រចេះ ខែឧសភា ឆ្នាំ២០២៦ (ពិន្ទុមធ្យម និង អត្រាចូលរួមធ្វើតេស្ត)</p>
+                <div class="chart-container"><canvas id="edTechChart"></canvas></div>
+            </div>
+
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                <!-- Chart: Pass Rate Comparison -->
+                <!-- Pass Rate Chart -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
                     <h3 class="text-base font-bold text-gray-800 mb-1 font-moul">អត្រាសិស្សជាប់ (A,B,C) តាមខែ</h3>
                     <p class="text-xs text-gray-500 mb-4">ប្រៀបធៀបតេស្តខែមីនា និងខែឧសភា</p>
-                    <div class="relative h-72 w-full"><canvas id="passRateChart"></canvas></div>
+                    <div class="chart-container"><canvas id="passRateChart"></canvas></div>
                 </div>
                 
-                <!-- Chart: Grade Distribution -->
+                <!-- Grade Distribution -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
                     <h3 class="text-base font-bold text-gray-800 mb-1 font-moul">របាយនិទ្ទេសតាមមុខវិជ្ជា (ភាគរយ)</h3>
                     <p class="text-xs text-gray-500 mb-4">លទ្ធផលខែឧសភា (១០០% Stacked)</p>
-                    <div class="relative h-72 w-full"><canvas id="gradeDistChart"></canvas></div>
+                    <div class="chart-container"><canvas id="gradeDistChart"></canvas></div>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                <!-- NEW CHART: Progress Delta -->
+                <!-- Progress Delta -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
                     <h3 class="text-base font-bold text-gray-800 mb-1 font-moul">វឌ្ឍនភាព/ការថយចុះ នៃអត្រាជាប់</h3>
-                    <p class="text-xs text-gray-500 mb-4">គម្លាតភាគរយ (Delta %) ពីខែមីនា ទៅ ខែឧសភា</p>
-                    <div class="relative h-72 w-full"><canvas id="progressDeltaChart"></canvas></div>
+                    <p class="text-xs text-gray-500 mb-4">គម្លាតភាគរយពីខែមីនា ទៅ ខែឧសភា (ពណ៌បៃតង=កើន, ពណ៌ក្រហម=ធ្លាក់)</p>
+                    <div class="chart-container"><canvas id="progressDeltaChart"></canvas></div>
                 </div>
 
-                <!-- NEW CHART: Gender Gap in Pass Rate -->
+                <!-- Gender Gap -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
                     <h3 class="text-base font-bold text-gray-800 mb-1 font-moul">គម្លាតយេនឌ័រ លើអត្រាប្រឡងជាប់ (ABC)</h3>
                     <p class="text-xs text-gray-500 mb-4">ធៀប %សិស្សស្រីជាប់ និង %សិស្សប្រុសជាប់ ក្នុងខែឧសភា</p>
-                    <div class="relative h-72 w-full"><canvas id="genderGapChart"></canvas></div>
+                    <div class="chart-container"><canvas id="genderGapChart"></canvas></div>
                 </div>
             </div>
             
-            <!-- Diploma Chart inside this section -->
+            <!-- Diploma Chart -->
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
                 <h3 class="text-base font-bold text-gray-800 mb-1 font-moul">លទ្ធផលប្រឡងសញ្ញាបត្របឋមភូមិ ឆ្នាំ២០២៤-២០២៥</h3>
                 <p class="text-xs text-gray-500 mb-4">បេក្ខជន ៧៨ នាក់ (ស្រី ៣៦) - ចំនួនសិស្សតាមនិទ្ទេស និងយេនឌ័រ</p>
-                <div class="relative h-64 w-full md:w-3/4 mx-auto"><canvas id="diplomaChart"></canvas></div>
+                <div class="chart-container md:w-3/4 mx-auto"><canvas id="diplomaChart"></canvas></div>
             </div>
         </section>
 
         <!-- ៥. គោលដៅ ៣ឆ្នាំ និងដំណើរការរៀនពេញមួយថ្ងៃ -->
         <section>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-                
-                <!-- 3-Year Goals -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 border-t-4 border-blue-500">
-                    <h2 class="text-xl font-bold mb-4 font-moul text-blue-900 border-b-2 border-blue-100 pb-2">គោលដៅអប់រំ ៣ឆ្នាំ (២៦-២៨)</h2>
-                    <p class="text-sm text-gray-500 mb-6">ភាគរយរំពឹងទុកសម្រាប់សិស្សជាប់និទ្ទេស A,B,C មុខវិជ្ជាគោល</p>
-                    <div class="relative h-72 w-full"><canvas id="threeYearGoalsChart"></canvas></div>
+            <div class="flex items-center gap-3 mb-6 border-b-2 border-blue-200 pb-2">
+                <div class="p-2 bg-blue-100 text-blue-700 rounded-lg">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
                 </div>
+                <h2 class="text-xl font-bold font-moul text-blue-900">ផលសម្រេចអប់រំ និងគោលដៅ ៣ឆ្នាំ (២០២៦-២០២៨)</h2>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-10">
+                <h3 class="text-lg font-bold text-blue-900 mb-2 font-moul">គោលដៅអត្រាសិស្សទទួលបាននិទ្ទេស A, B & C មុខវិជ្ជាគោល</h3>
+                <p class="text-sm text-gray-500 mb-6">ក្រាហ្វខ្សែបន្ទាត់បង្ហាញពីគោលដៅរំពឹងទុក ធៀបនឹងឆ្នាំមូលដ្ឋាន ២០២៥</p>
+                <div class="chart-container"><canvas id="threeYearGoalsChart"></canvas></div>
+            </div>
 
-                <!-- Slow Learners & Full Day -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 border-t-4 border-amber-500">
-                    <h2 class="text-xl font-bold mb-4 font-moul text-blue-900 border-b-2 border-amber-100 pb-2">ដំណើរការរៀនពេញ១ថ្ងៃ & សិស្សរៀនយឺត</h2>
-                    
-                    <div class="grid grid-cols-2 gap-4 mb-6">
-                        <div class="bg-amber-50 rounded-lg p-3 text-center border border-amber-100">
-                            <p class="text-xs text-amber-800 font-bold">សិស្សរៀនយឺត (EF)</p>
-                            <p class="text-2xl font-bold text-amber-600">២៤០</p>
-                        </div>
-                        <div class="bg-emerald-50 rounded-lg p-3 text-center border border-emerald-100">
-                            <p class="text-xs text-emerald-800 font-bold">បានជួយបំប៉ន</p>
-                            <p class="text-2xl font-bold text-emerald-600">៣៣</p>
-                        </div>
-                    </div>
-                    
-                    <div class="relative h-48 w-full"><canvas id="slowLearnerOverviewChart"></canvas></div>
+            <div class="flex items-center gap-3 mb-6 border-b-2 border-blue-200 pb-2">
+                <div class="p-2 bg-purple-100 text-purple-700 rounded-lg">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                </div>
+                <h2 class="text-xl font-bold font-moul text-blue-900">ដំណើរការរៀនពេញមួយថ្ងៃ និងជួយសិស្សរៀនយឺត (២០២៥-២០២៦)</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-amber-50 rounded-xl shadow-sm border border-amber-200 p-6">
+                    <p class="text-sm text-amber-800 font-semibold mb-1">សិស្សរៀនយឺតសរុប (EF)</p>
+                    <p class="text-3xl font-bold text-amber-900">២៤០ <span class="text-sm font-normal">នាក់ (ស្រី ១២៧)</span></p>
+                </div>
+                <div class="bg-emerald-50 rounded-xl shadow-sm border border-emerald-200 p-6">
+                    <p class="text-sm text-emerald-800 font-semibold mb-1">សិស្សដែលបានជួយបំប៉ន</p>
+                    <p class="text-3xl font-bold text-emerald-900">៣៣ <span class="text-sm font-normal">នាក់ (ស្រី ១៨)</span></p>
+                </div>
+                <div class="bg-indigo-50 rounded-xl shadow-sm border border-indigo-200 p-6">
+                    <p class="text-sm text-indigo-800 font-semibold mb-1">ថ្នាក់អនុវត្តដំណើរការរៀនពេញ១ថ្ងៃ</p>
+                    <p class="text-3xl font-bold text-indigo-900">០ <span class="text-sm font-normal">ថ្នាក់</span></p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-base font-bold text-gray-800 mb-1 font-moul">ស្ថានភាពសិស្សរៀនយឺត</h3>
+                    <p class="text-xs text-gray-500 mb-4">ធៀបសិស្សសរុប, អ្នករៀនយឺត និងអ្នកបានជួយ</p>
+                    <div class="chart-container"><canvas id="slowLearnerOverviewChart"></canvas></div>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-base font-bold text-gray-800 mb-1 font-moul">សិស្សរៀនយឺតតាមមុខវិជ្ជា</h3>
+                    <p class="text-xs text-gray-500 mb-4">និទ្ទេស EF ដើមឆ្នាំ លើមុខវិជ្ជាគោល</p>
+                    <div class="chart-container"><canvas id="slowLearnerSubjectChart"></canvas></div>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-base font-bold text-gray-800 mb-1 font-moul">ដំណើរការរៀនពេញ១ថ្ងៃ</h3>
+                    <p class="text-xs text-gray-500 mb-4">ចំនួនថ្នាក់រៀនតាមកម្រិតនៃការអនុវត្ត</p>
+                    <div class="chart-container"><canvas id="fullDayOperationChart"></canvas></div>
                 </div>
             </div>
         </section>
 
         <!-- ៦. ស្ថានភាពផែនការ និងការត្រួតពិនិត្យ (Checklist) -->
         <section class="pb-10">
-            <h2 class="text-xl font-bold mb-4 font-moul text-blue-900 border-b-2 border-blue-200 pb-2">ស្ថានភាពផែនការ និងការត្រួតពិនិត្យសាលារៀនគំរូ</h2>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <h2 class="text-xl font-bold mb-4 font-moul text-blue-900 border-b-2 border-blue-200 pb-2">ស្ថានភាពផែនការ និងការត្រួតពិនិត្យ (Checklist)</h2>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-100">
                         <tr>
@@ -238,25 +301,25 @@
                         <tr>
                             <td class="px-6 py-4 font-medium">១</td>
                             <td class="px-6 py-4">ការពិនិត្យផ្ទៀងផ្ទាត់ និងមានផែនការកែលម្អសាលារៀន</td>
-                            <td class="px-6 py-4"><span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-bold">មានរក្សាទុក</span></td>
+                            <td class="px-6 py-4"><span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-bold">មានរក្សាទុក</span></td>
                             <td class="px-6 py-4 font-bold text-green-600">100%</td>
                         </tr>
                         <tr>
                             <td class="px-6 py-4 font-medium">២</td>
                             <td class="px-6 py-4">ការពិនិត្យផ្ទៀងផ្ទាត់ និងមានផែនការរំកិល ៣ឆ្នាំ</td>
-                            <td class="px-6 py-4"><span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-bold">មានរក្សាទុក</span></td>
+                            <td class="px-6 py-4"><span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-bold">មានរក្សាទុក</span></td>
                             <td class="px-6 py-4 font-bold text-green-600">100%</td>
                         </tr>
                         <tr>
                             <td class="px-6 py-4 font-medium">៣</td>
                             <td class="px-6 py-4">ការពិនិត្យផ្ទៀងផ្ទាត់ និងមានផែនការសមិទ្ធកម្ម ៦ឆ្នាំ</td>
-                            <td class="px-6 py-4"><span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-bold">មានរក្សាទុក</span></td>
+                            <td class="px-6 py-4"><span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-bold">មានរក្សាទុក</span></td>
                             <td class="px-6 py-4 font-bold text-green-600">100%</td>
                         </tr>
                         <tr>
                             <td class="px-6 py-4 font-medium">៤</td>
                             <td class="px-6 py-4">ទិន្នន័យតេស្ដស្ដង់ដា (៣.១.៤)</td>
-                            <td class="px-6 py-4"><span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-bold">មានរួចរាល់</span></td>
+                            <td class="px-6 py-4"><span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-bold">មានរួចរាល់</span></td>
                             <td class="px-6 py-4 font-bold text-green-600">100%</td>
                         </tr>
                     </tbody>
@@ -269,36 +332,29 @@
         // Global Chart Defaults
         Chart.defaults.font.family = "'Siemreap', sans-serif";
         Chart.defaults.color = '#475569'; // Slate-600
+        Chart.defaults.maintainAspectRatio = false; // CRITICAL for responsiveness
+        Chart.defaults.responsive = true;
 
         // ==========================================
-        // Data Definitions (From Analyzed Documents)
+        // Data Definitions
         // ==========================================
         const subjects = ['ខ្មែរ', 'គណិត', 'រូប', 'គីមី', 'ជីវៈ', 'ប្រវត្តិ', 'សីលធម៌', 'ផែនដី', 'ភូមិ', 'អង់គ្លេស'];
         
         // Pass Rates Data
         const passMarch = [29.00, 6.00, 36.00, 53.60, 14.49, 34.78, 8.69, 26.08, 15.94, 18.84];
         const passMay   = [31.88, 5.80, 17.39, 4.35, 27.54, 7.25, 18.84, 50.72, 36.23, 24.64];
-        
-        // Calculate Deltas for the Waterfall/Delta chart
         const deltas = passMay.map((may, idx) => (may - passMarch[idx]).toFixed(2));
 
-        // Gender Gap Data (May Standardized Test)
-        // Out of 69 students: 33 Female, 36 Male
+        // Gender Gap Data (May)
         const femaleTotal = 33;
-        const maleTotal = 36;
-        
-        // Female ABC Counts
+        const maleTotal = 36; // 69 total - 33 female
         const f_ABC_count = [15, 2, 7, 2, 6, 4, 7, 19, 12, 9];
-        // Total ABC Counts
         const t_ABC_count = [22, 4, 12, 3, 19, 5, 13, 35, 25, 17];
-        // Male ABC Counts (Total - Female)
         const m_ABC_count = t_ABC_count.map((tot, idx) => tot - f_ABC_count[idx]);
-
-        // Percentages within own gender group
         const f_PassPct = f_ABC_count.map(c => ((c / femaleTotal) * 100).toFixed(1));
         const m_PassPct = m_ABC_count.map(c => ((c / maleTotal) * 100).toFixed(1));
 
-        // Grade Distribution (May)
+        // Grade Distribution (May Counts)
         const grA = [2, 0, 4, 1, 0, 1, 9, 13, 4, 2];
         const grB = [3, 3, 3, 0, 13, 0, 1, 16, 11, 4];
         const grC = [17, 1, 5, 2, 6, 4, 3, 6, 10, 11];
@@ -307,42 +363,84 @@
         const grF = [22, 61, 48, 51, 27, 20, 43, 10, 15, 35];
         const toPct = (data) => data.map(v => (v / 69 * 100).toFixed(1));
 
+        // EdTech Online Test Simulated Data (May 2026 - Kratie)
+        const edTechScores = [45, 25, 35, 22, 42, 38, 40, 55, 48, 30]; 
+        const edTechParticipation = [95, 92, 88, 85, 90, 94, 96, 91, 93, 89];
+
         // ==========================================
-        // 1. Enrollment Chart
+        // Chart Initializations
         // ==========================================
-        new Chart(document.getElementById('enrollmentChart'), {
+        
+        // 1. Enrollment By Grade Chart
+        new Chart(document.getElementById('enrollmentByGradeChart'), {
             type: 'bar',
             data: {
-                labels: ['សិស្សសរុប (៧-៩)', 'សិស្សរៀនជាក់ស្តែង', 'បុគ្គលិកអប់រំ'],
+                labels: ['ថ្នាក់ទី ៧', 'ថ្នាក់ទី ៨', 'ថ្នាក់ទី ៩'],
                 datasets: [
-                    { label: 'សរុប', data: [261, 254, 22], backgroundColor: '#3b82f6', borderRadius: 4 },
-                    { label: 'ស្រី', data: [140, 135, 19], backgroundColor: '#ec4899', borderRadius: 4 }
+                    { label: 'សរុប', data: [83, 108, 70], backgroundColor: '#3b82f6', borderRadius: 4 },
+                    { label: 'ស្រី', data: [51, 56, 33], backgroundColor: '#ec4899', borderRadius: 4 }
                 ]
             },
-            options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } }, plugins: { legend: { position: 'top' } } }
+            options: { plugins: { legend: { position: 'top' } }, scales: { y: { beginAtZero: true } } }
         });
 
-        // ==========================================
         // 2. Health Chart (Doughnut)
-        // ==========================================
         new Chart(document.getElementById('healthChart'), {
             type: 'doughnut',
-            data: { labels: ['ស្រី (១៥ នាក់)', 'ប្រុស (១២ នាក់)'], datasets: [{ data: [15, 12], backgroundColor: ['#ec4899', '#f59e0b'], borderWidth: 2 }] },
-            options: { responsive: true, maintainAspectRatio: false, cutout: '65%', plugins: { legend: { position: 'bottom' } } }
+            data: { 
+                labels: ['ស្រី', 'ប្រុស'], 
+                datasets: [{ data: [15, 12], backgroundColor: ['#ec4899', '#ef4444'], borderWidth: 2 }] 
+            },
+            options: { cutout: '60%', plugins: { legend: { position: 'bottom' } } }
         });
 
-        // ==========================================
-        // 3. Staff Pie Chart
-        // ==========================================
-        new Chart(document.getElementById('staffPieChart'), {
-            type: 'pie',
-            data: { labels: ['បុគ្គលិកស្រី', 'បុគ្គលិកប្រុស'], datasets: [{ data: [19, 3], backgroundColor: ['#ec4899', '#3b82f6'] }] },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }
+        // 3. Staff Bar Chart
+        new Chart(document.getElementById('staffChart'), {
+            type: 'bar',
+            data: {
+                labels: ['បុគ្គលិកអប់រំ', 'បុគ្គលិកបង្រៀន', 'បុគ្គលិកមិនបង្រៀន'],
+                datasets: [
+                    { label: 'សរុប', data: [22, 16, 6], backgroundColor: '#ea580c', borderRadius: 4 },
+                    { label: 'ស្រី', data: [19, 14, 5], backgroundColor: '#fcd34d', borderRadius: 4 } 
+                ]
+            },
+            options: { plugins: { legend: { position: 'top' } }, scales: { y: { beginAtZero: true } } }
         });
 
-        // ==========================================
-        // 4. Pass Rate Chart (March vs May)
-        // ==========================================
+        // 4. Teacher Gender (Horizontal)
+        new Chart(document.getElementById('teacherGenderChart'), {
+            type: 'bar',
+            data: { labels: ['ស្រី', 'ប្រុស'], datasets: [{ data: [14, 2], backgroundColor: ['#10b981', '#059669'], borderRadius: 4 }] },
+            options: { indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true } } }
+        });
+
+        // 5. Student Gender (Horizontal)
+        new Chart(document.getElementById('studentGenderChart'), {
+            type: 'bar',
+            data: { labels: ['ស្រី', 'ប្រុស'], datasets: [{ data: [140, 121], backgroundColor: ['#60a5fa', '#2563eb'], borderRadius: 4 }] },
+            options: { indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true } } }
+        });
+
+        // 6. EdTech Online Test Chart (Mixed Bar/Line)
+        new Chart(document.getElementById('edTechChart'), {
+            type: 'bar',
+            data: {
+                labels: subjects,
+                datasets: [
+                    { type: 'bar', label: 'ពិន្ទុមធ្យម (លើ១០០)', data: edTechScores, backgroundColor: '#8b5cf6', borderRadius: 4, yAxisID: 'y' },
+                    { type: 'line', label: 'អត្រាចូលរួមធ្វើតេស្ត (%)', data: edTechParticipation, borderColor: '#f59e0b', backgroundColor: '#f59e0b', borderWidth: 3, tension: 0.3, pointRadius: 4, yAxisID: 'y1' }
+                ]
+            },
+            options: {
+                scales: {
+                    y: { type: 'linear', display: true, position: 'left', title: {display: true, text: 'ពិន្ទុមធ្យមសរុប'}, max: 100 },
+                    y1: { type: 'linear', display: true, position: 'right', title: {display: true, text: 'ភាគរយចូលរួម (%)'}, max: 100, grid: { drawOnChartArea: false } }
+                },
+                plugins: { legend: { position: 'top' } }
+            }
+        });
+
+        // 7. Pass Rate Chart (March vs May)
         new Chart(document.getElementById('passRateChart'), {
             type: 'bar',
             data: {
@@ -352,73 +450,48 @@
                     { label: 'ខែឧសភា (%)', data: passMay, backgroundColor: '#3b82f6', borderRadius: 4 }
                 ]
             },
-            options: { responsive: true, maintainAspectRatio: false, scales: { y: { max: 60 } } }
+            options: { scales: { y: { beginAtZero: true, max: 60 } } }
         });
 
-        // ==========================================
-        // 5. Grade Distribution (100% Stacked)
-        // ==========================================
+        // 8. Grade Distribution (100% Stacked)
         new Chart(document.getElementById('gradeDistChart'), {
             type: 'bar',
             data: {
                 labels: subjects,
                 datasets: [
-                    { label: 'A', data: toPct(grA), backgroundColor: '#10b981' },
-                    { label: 'B', data: toPct(grB), backgroundColor: '#34d399' },
-                    { label: 'C', data: toPct(grC), backgroundColor: '#6ee7b7' },
-                    { label: 'D', data: toPct(grD), backgroundColor: '#facc15' },
+                    { label: 'A', data: toPct(grA), backgroundColor: '#3b82f6' },
+                    { label: 'B', data: toPct(grB), backgroundColor: '#ef4444' },
+                    { label: 'C', data: toPct(grC), backgroundColor: '#eab308' },
+                    { label: 'D', data: toPct(grD), backgroundColor: '#22c55e' },
                     { label: 'E', data: toPct(grE), backgroundColor: '#f97316' },
-                    { label: 'F', data: toPct(grF), backgroundColor: '#ef4444' }
+                    { label: 'F', data: toPct(grF), backgroundColor: '#06b6d4' }
                 ]
             },
-            options: { responsive: true, maintainAspectRatio: false, scales: { x: { stacked: true }, y: { stacked: true, max: 100 } }, plugins: { legend: { position: 'bottom' } } }
+            options: { scales: { x: { stacked: true }, y: { stacked: true, max: 100 } }, plugins: { legend: { position: 'bottom', reverse: true } } }
         });
 
-        // ==========================================
-        // 6. NEW: Progress Delta Chart
-        // ==========================================
-        const deltaColors = deltas.map(val => val > 0 ? '#10b981' : '#ef4444'); // Green for positive, Red for negative
+        // 9. Progress Delta Chart
+        const deltaColors = deltas.map(val => val > 0 ? '#10b981' : '#ef4444');
         new Chart(document.getElementById('progressDeltaChart'), {
             type: 'bar',
-            data: {
-                labels: subjects,
-                datasets: [{
-                    label: 'គម្លាតពីខែមីនា ទៅខែឧសភា (%)',
-                    data: deltas,
-                    backgroundColor: deltaColors,
-                    borderRadius: 4
-                }]
-            },
-            options: { 
-                responsive: true, 
-                maintainAspectRatio: false, 
-                plugins: { legend: { display: false } },
-                scales: { y: { title: { display: true, text: 'កំណើន / ធ្លាក់ចុះ (%)' } } }
-            }
+            data: { labels: subjects, datasets: [{ data: deltas, backgroundColor: deltaColors, borderRadius: 4 }] },
+            options: { plugins: { legend: { display: false } }, scales: { y: { title: { display: true, text: 'កំណើន / ធ្លាក់ចុះ (%)' } } } }
         });
 
-        // ==========================================
-        // 7. NEW: Gender Gap Chart
-        // ==========================================
+        // 10. Gender Gap Chart
         new Chart(document.getElementById('genderGapChart'), {
             type: 'bar',
             data: {
                 labels: subjects,
                 datasets: [
-                    { label: '% សិស្សស្រីជាប់ (ធៀបសិស្សស្រីសរុប)', data: f_PassPct, backgroundColor: '#ec4899', borderRadius: 4 },
-                    { label: '% សិស្សប្រុសជាប់ (ធៀបសិស្សប្រុសសរុប)', data: m_PassPct, backgroundColor: '#3b82f6', borderRadius: 4 }
+                    { label: '% សិស្សស្រីជាប់', data: f_PassPct, backgroundColor: '#ec4899', borderRadius: 4 },
+                    { label: '% សិស្សប្រុសជាប់', data: m_PassPct, backgroundColor: '#3b82f6', borderRadius: 4 }
                 ]
             },
-            options: { 
-                responsive: true, 
-                maintainAspectRatio: false,
-                scales: { y: { max: 70, title: { display: true, text: 'អត្រាប្រឡងជាប់តាមភេទ (%)' } } }
-            }
+            options: { scales: { y: { beginAtZero: true, max: 80 } } }
         });
 
-        // ==========================================
-        // 8. Diploma Chart
-        // ==========================================
+        // 11. Diploma Chart
         new Chart(document.getElementById('diplomaChart'), {
             type: 'bar',
             data: {
@@ -428,40 +501,60 @@
                     { label: 'សិស្សប្រុស', data: [0, 2, 2, 3, 35], backgroundColor: '#3b82f6' }
                 ]
             },
-            options: { responsive: true, maintainAspectRatio: false, scales: { x: { stacked: true }, y: { stacked: true } } }
+            options: { scales: { x: { stacked: true }, y: { stacked: true } } }
         });
 
-        // ==========================================
-        // 9. 3-Year Goals Chart
-        // ==========================================
+        // 12. 3-Year Goals Chart
         new Chart(document.getElementById('threeYearGoalsChart'), {
             type: 'line',
             data: {
                 labels: ['មូលដ្ឋាន ២០២៥', 'គោលដៅ ២០២៦', 'គោលដៅ ២០២៧', 'គោលដៅ ២០២៨'],
                 datasets: [
-                    { label: 'ភាសាខ្មែរ', data: [58.5, 62.7, 80.0, 71.0], borderColor: '#3b82f6', tension: 0.3, borderWidth: 3 },
-                    { label: 'គណិតវិទ្យា', data: [4.9, 12.1, 21.2, 33.6], borderColor: '#ef4444', tension: 0.3, borderWidth: 3 },
-                    { label: 'រូបវិទ្យា', data: [0, 10.2, 21.2, 33.6], borderColor: '#10b981', tension: 0.3, borderWidth: 3 },
-                    { label: 'អង់គ្លេស', data: [34.1, 47.2, 60.4, 66.0], borderColor: '#f59e0b', tension: 0.3, borderWidth: 3 }
+                    { label: 'ភាសាខ្មែរ', data: [58.5, 62.7, 80.0, 71.0], borderColor: '#3b82f6', backgroundColor: '#3b82f6', tension: 0.3, borderWidth: 3 },
+                    { label: 'គណិតវិទ្យា', data: [4.9, 12.1, 21.2, 33.6], borderColor: '#ef4444', backgroundColor: '#ef4444', tension: 0.3, borderWidth: 3 },
+                    { label: 'រូបវិទ្យា', data: [0, 10.2, 21.2, 33.6], borderColor: '#10b981', backgroundColor: '#10b981', tension: 0.3, borderWidth: 3 },
+                    { label: 'អង់គ្លេស', data: [34.1, 47.2, 60.4, 66.0], borderColor: '#f59e0b', backgroundColor: '#f59e0b', tension: 0.3, borderWidth: 3 }
                 ]
             },
-            options: { responsive: true, maintainAspectRatio: false, scales: { y: { max: 100 } } }
+            options: { scales: { y: { beginAtZero: true, max: 100 } } }
         });
 
-        // ==========================================
-        // 10. Slow Learner Overview
-        // ==========================================
+        // 13. Slow Learner Overview
         new Chart(document.getElementById('slowLearnerOverviewChart'), {
             type: 'bar',
             data: {
                 labels: ['ថ្នាក់ទី ៧', 'ថ្នាក់ទី ៨', 'ថ្នាក់ទី ៩'],
                 datasets: [
-                    { label: 'សិស្សសរុប', data: [83, 108, 70], backgroundColor: '#cbd5e1', borderRadius: 4 },
+                    { label: 'សិស្សសរុប', data: [83, 108, 70], backgroundColor: '#94a3b8', borderRadius: 4 },
                     { label: 'ត្រូវជួយ (EF)', data: [79, 100, 61], backgroundColor: '#f59e0b', borderRadius: 4 },
                     { label: 'បានជួយបំប៉ន', data: [6, 12, 15], backgroundColor: '#10b981', borderRadius: 4 }
                 ]
             },
-            options: { responsive: true, maintainAspectRatio: false }
+            options: { scales: { y: { beginAtZero: true } } }
+        });
+        
+        // 14. Slow Learner Subject Chart
+        new Chart(document.getElementById('slowLearnerSubjectChart'), {
+            type: 'bar',
+            data: {
+                labels: ['ថ្នាក់ទី ៧', 'ថ្នាក់ទី ៨', 'ថ្នាក់ទី ៩'],
+                datasets: [
+                    { label: 'ភាសាខ្មែរ', data: [5, 11, 8], backgroundColor: '#3b82f6', borderRadius: 4 },
+                    { label: 'គណិតវិទ្យា', data: [6, 11, 14], backgroundColor: '#ef4444', borderRadius: 4 },
+                    { label: 'រូបវិទ្យា', data: [6, 8, 12], backgroundColor: '#8b5cf6', borderRadius: 4 }
+                ]
+            },
+            options: { scales: { y: { beginAtZero: true } } }
+        });
+
+        // 15. Full-Day Operation Chart
+        new Chart(document.getElementById('fullDayOperationChart'), {
+            type: 'bar',
+            data: {
+                labels: ['មិនទាន់ចាប់ផ្តើម', 'ទើបនឹងចាប់ផ្តើម', 'បានច្រើន', 'ពេញលេញ'],
+                datasets: [{ label: 'ចំនួនថ្នាក់', data: [0, 0, 0, 0], backgroundColor: ['#ef4444', '#f59e0b', '#3b82f6', '#10b981'], borderRadius: 4 }]
+            },
+            options: { scales: { y: { beginAtZero: true, max: 5, ticks: {stepSize: 1} } }, plugins: { legend: { display: false } } }
         });
 
         // ==========================================
