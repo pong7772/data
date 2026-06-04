@@ -284,6 +284,124 @@
             </div>
         </section>
 
+        <!-- ដើមឈើបញ្ហា (Problem Tree) -->
+        <section class="pb-10">
+            <h2 class="text-xl font-bold mb-6 font-moul text-blue-900 border-b-2 border-blue-200 pb-2">ការវិភាគដើមឈើបញ្ហា (Problem Tree Analysis)</h2>
+            
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 overflow-hidden relative">
+                <!-- Background Decoration -->
+                <div class="absolute inset-0 opacity-5 pointer-events-none" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%231e3a8a\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+                
+                <div class="relative z-10 flex flex-col items-center max-w-4xl mx-auto">
+                    
+                    <!-- Effects / ផលវិបាក (Leaves/Branches) -->
+                    <div class="w-full mb-6">
+                        <div class="text-center mb-2">
+                            <span class="inline-block px-4 py-1 bg-green-100 text-green-800 font-bold rounded-full text-sm uppercase tracking-wider mb-2">ផលវិបាក (Effects) 🍃</span>
+                        </div>
+                        <div class="bg-green-50 border-2 border-green-200 rounded-2xl p-6 shadow-sm w-full md:w-3/4 mx-auto transform transition duration-300 hover:scale-105 hover:shadow-md">
+                            <ul class="space-y-3 text-green-900 font-medium text-center sm:text-left">
+                                <li class="flex items-center justify-center sm:justify-start gap-2">
+                                    <svg class="w-5 h-5 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                                    ៚ អត្រាបោះបង់ការសិក្សាកើនឡើង
+                                </li>
+                                <li class="flex items-center justify-center sm:justify-start gap-2">
+                                    <svg class="w-5 h-5 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                                    ៚ សិស្សបាត់បង់ឱកាសអភិវឌ្ឍសមត្ថភាព
+                                </li>
+                                <li class="flex items-center justify-center sm:justify-start gap-2">
+                                    <svg class="w-5 h-5 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                                    ៚ សាលាមិនអាចសម្រេចស្តង់ដាសាលាគំរូ
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Connecting Trunk -->
+                    <div class="w-4 h-8 bg-amber-700/40 rounded-sm"></div>
+
+                    <!-- Core Problem / បញ្ហាស្នូល (Trunk) -->
+                    <div class="w-full my-2">
+                        <div class="text-center mb-2">
+                            <span class="inline-block px-4 py-1 bg-red-100 text-red-800 font-bold rounded-full text-sm uppercase tracking-wider mb-2">បញ្ហាស្នូល (Core Problem) 🪵</span>
+                        </div>
+                        <div class="bg-red-600 text-white rounded-2xl p-6 shadow-lg w-full md:w-4/5 mx-auto text-center transform transition duration-300 hover:scale-105 border-4 border-red-200 relative overflow-hidden">
+                            <!-- Pulse effect -->
+                            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                <div class="w-3/4 h-3/4 bg-red-500 rounded-full blur-3xl opacity-50 animate-pulse"></div>
+                            </div>
+                            <h3 class="text-xl md:text-2xl font-bold font-moul mb-3 relative z-10 text-white">លទ្ធផលសិក្សារបស់សិស្សធ្លាក់ចុះទាបខ្លាំង</h3>
+                            <p class="text-red-100 font-bold text-lg relative z-10 bg-red-700/50 inline-block px-4 py-2 rounded-lg backdrop-blur-sm">(៨៧.៤០% ទទួលបាននិទ្ទេស D, E, F)</p>
+                        </div>
+                    </div>
+
+                    <!-- Connecting Roots -->
+                    <div class="w-4 h-8 bg-amber-700/40 rounded-sm"></div>
+                    
+                    <!-- Branching line -->
+                    <div class="w-full md:w-3/4 h-4 border-t-4 border-l-4 border-r-4 border-amber-700/40 rounded-t-lg hidden md:block"></div>
+                    
+                    <div class="text-center mt-4 md:mt-2 mb-4 w-full">
+                        <span class="inline-block px-4 py-1 bg-amber-100 text-amber-800 font-bold rounded-full text-sm uppercase tracking-wider mb-2">មូលហេតុ (Root Causes) 🌱</span>
+                    </div>
+
+                    <!-- Causes / មូលហេតុ (Roots) -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full mt-2 relative">
+                        <!-- Connector lines for mobile/tablet -->
+                        <div class="absolute top-0 left-1/2 -ml-[2px] w-1 h-full bg-amber-700/20 md:hidden z-0"></div>
+
+                        <!-- Cause 1 -->
+                        <div class="bg-amber-50 border-2 border-amber-200 rounded-xl p-5 shadow-sm transform transition duration-300 hover:-translate-y-2 hover:shadow-md relative z-10">
+                            <div class="bg-amber-100 w-12 h-12 rounded-full flex items-center justify-center mb-4 mx-auto border-2 border-white shadow-sm">
+                                <svg class="w-6 h-6 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                            </div>
+                            <h4 class="font-bold text-amber-900 text-center mb-3 border-b border-amber-200 pb-2">១. គណៈគ្រប់គ្រង</h4>
+                            <ul class="text-sm text-amber-800 space-y-2">
+                                <li class="flex items-start gap-2"><span class="text-red-500 font-bold mt-0.5">•</span> ដឹកនាំព្រលែងសេរី</li>
+                                <li class="flex items-start gap-2"><span class="text-red-500 font-bold mt-0.5">•</span> មិនប្រើប្រាស់ទិន្នន័យដើម្បីកែលម្អ</li>
+                            </ul>
+                        </div>
+
+                        <!-- Cause 2 -->
+                        <div class="bg-amber-50 border-2 border-amber-200 rounded-xl p-5 shadow-sm transform transition duration-300 hover:-translate-y-2 hover:shadow-md relative z-10">
+                            <div class="bg-amber-100 w-12 h-12 rounded-full flex items-center justify-center mb-4 mx-auto border-2 border-white shadow-sm">
+                                <svg class="w-6 h-6 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                            </div>
+                            <h4 class="font-bold text-amber-900 text-center mb-3 border-b border-amber-200 pb-2">២. គ្រូបង្រៀន</h4>
+                            <ul class="text-sm text-amber-800 space-y-2">
+                                <li class="flex items-start gap-2"><span class="text-red-500 font-bold mt-0.5">•</span> មិនព្រមប្តូរវិធីសាស្ត្របង្រៀនថ្មី</li>
+                                <li class="flex items-start gap-2"><span class="text-red-500 font-bold mt-0.5">•</span> មិនជួយបំប៉នសិស្សរៀនយឺត</li>
+                            </ul>
+                        </div>
+
+                        <!-- Cause 3 -->
+                        <div class="bg-amber-50 border-2 border-amber-200 rounded-xl p-5 shadow-sm transform transition duration-300 hover:-translate-y-2 hover:shadow-md relative z-10">
+                            <div class="bg-amber-100 w-12 h-12 rounded-full flex items-center justify-center mb-4 mx-auto border-2 border-white shadow-sm">
+                                <svg class="w-6 h-6 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                            </div>
+                            <h4 class="font-bold text-amber-900 text-center mb-3 border-b border-amber-200 pb-2">៣. សិស្សានុសិស្ស</h4>
+                            <ul class="text-sm text-amber-800 space-y-2">
+                                <li class="flex items-start gap-2"><span class="text-red-500 font-bold mt-0.5">•</span> ញៀនលេងទូរស័ព្ទ/ហ្គេមហួសហេតុ</li>
+                                <li class="flex items-start gap-2"><span class="text-red-500 font-bold mt-0.5">•</span> មិនមានទម្លាប់ស្វ័យសិក្សានៅផ្ទះ</li>
+                            </ul>
+                        </div>
+
+                        <!-- Cause 4 -->
+                        <div class="bg-amber-50 border-2 border-amber-200 rounded-xl p-5 shadow-sm transform transition duration-300 hover:-translate-y-2 hover:shadow-md relative z-10">
+                            <div class="bg-amber-100 w-12 h-12 rounded-full flex items-center justify-center mb-4 mx-auto border-2 border-white shadow-sm">
+                                <svg class="w-6 h-6 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                            </div>
+                            <h4 class="font-bold text-amber-900 text-center mb-3 border-b border-amber-200 pb-2">៤. សហគមន៍/មាតាបិតា</h4>
+                            <ul class="text-sm text-amber-800 space-y-2">
+                                <li class="flex items-start gap-2"><span class="text-red-500 font-bold mt-0.5">•</span> មិនតាមដានការសិក្សារបស់កូន</li>
+                                <li class="flex items-start gap-2"><span class="text-red-500 font-bold mt-0.5">•</span> ខ្វះតម្លាភាពក្នុងការចូលរួមអភិវឌ្ឍសាលា</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- ៦. ស្ថានភាពផែនការ និងការត្រួតពិនិត្យ (Checklist) -->
         <section class="pb-10">
             <h2 class="text-xl font-bold mb-4 font-moul text-blue-900 border-b-2 border-blue-200 pb-2">ស្ថានភាពផែនការ និងការត្រួតពិនិត្យ (Checklist)</h2>
